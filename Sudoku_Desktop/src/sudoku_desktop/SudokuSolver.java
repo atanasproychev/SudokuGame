@@ -20,6 +20,7 @@ public class SudokuSolver {
     private Stack<String> redoMoves;
     private File saveFileName;
     private int[][] actual;
+    private int[][] state; // 0-empty; 1-filled originally; 2-filled by solver; 3-filled by user; 4-9,11-13 - filled by user but corrected by solver
     private int[][] actualBackup;
     private int seconds;
     private boolean gameStarted;
@@ -36,6 +37,7 @@ public class SudokuSolver {
     
     public SudokuSolver() {
         actual = new int[9][9];
+        state = new int[9][9];
         actualBackup = new int[9][9];
         possible = new String[9][9];
         moves = new Stack();
@@ -51,11 +53,22 @@ public class SudokuSolver {
         return actual[row][col];
     }
 
+    public int getState(int row, int col)
+    {
+        return state[row][col];
+    }
     public void setActual(int row, int col, int value)
     {
         actual[row][col] = value;
     }
 
+    public void setActual(String sudokuAsString)
+    {
+        for(int i = 0; i < 9; i++)
+            for(int j = 0; j < 9; j++)
+                actual[i][j] = sudokuAsString.charAt(i * 9 + j) - '0';
+    }
+    
     public String getPossible(int row, int col)
     {
         return possible[row][col];
@@ -853,7 +866,9 @@ public class SudokuSolver {
             //saves the move into stack
             int value = Integer.parseInt(String.valueOf(possibleValues.charAt(i)));
 //            setCell(coordinates[0], coordinates[1], value);
+            setActual(coordinates[0], coordinates[1], value);
             moves.push(String.format("%d%d%d", coordinates[0], coordinates[1], value));
+            System.out.printf("%d%d%d", coordinates[0], coordinates[1], value);
 //            setActivity(String.format("На (%d, %d) е добавена стойност %d.", coordinates[0] + 1, coordinates[1] + 1, value));
             try
             {
@@ -924,8 +939,11 @@ public class SudokuSolver {
         }
         catch (Exception e)
         {
+            System.out.println("Exception in generateNewPuzzle");
             return "";
         }
+        
+        System.out.println("First:\n" + printMatrix());
         
         actualBackup = actual.clone();
         switch(level)
@@ -953,6 +971,7 @@ public class SudokuSolver {
         createEmptyCells(numberOfEmptyCells);
         
 //        setBoard();
+        System.out.println("Matrix with empty cells:\n" + printMatrix());
         
         StringBuilder sudokuToString = new StringBuilder();
         for(int i = 0; i < 9; i++)
@@ -993,6 +1012,8 @@ public class SudokuSolver {
                 return "";
         }
         while(true);
+        System.out.println("sudokuToString:   " + sudokuToString);
+        setActual(sudokuToString.toString());
         return sudokuToString.toString();//score?
     }
     
@@ -1107,6 +1128,7 @@ public class SudokuSolver {
         do
         {
             result = generateNewPuzzle(level);
+            System.out.println("Total Score: " + totalscore);
             if(!result.isEmpty())
             {
                 switch (level) {
@@ -1131,8 +1153,29 @@ public class SudokuSolver {
             count++;
         }
         while(count < 500000);
+        System.out.printf("Final matrix:\n%s\n%d", printMatrix(), count);
         return result;
     }
+    
+    public String printMatrix()
+    {
+        String result = "";
+        for(int i = 0; i < 9; i++)
+        {
+            if(i % 3 == 0)
+                result = String.format("%s\n", result);
+            for(int j = 0; j < 9; j++)
+            {
+                if(j % 3 == 0)
+                    result = String.format("%s ", result);
+                result = String.format("%s%d", result, actual[i][j]);
+            }
+            result = String.format("%s\n", result);
+        }
+        return result;
+    }
+    
+    
     /*public static void main(String[] args) {
         // TODO code application logic here
     }*/

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.4" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
@@ -416,13 +416,18 @@
         </Component>
         <Component class="javax.swing.JToolBar$Separator" name="jSeparator3">
         </Component>
-        <Component class="javax.swing.JLabel" name="lblTime">
+        <Component class="javax.swing.JLabel" name="lblTime1">
           <Properties>
             <Property name="text" type="java.lang.String" value="jLabel13"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[150, 14]"/>
             </Property>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="lblTime = new Clock();"/>
+            <AuxValue name="JavaCodeGenerator_DeclarationPre" type="java.lang.String" value="private Clock lblTime;"/>
+            <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="SudokuUI_lblTime"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>

@@ -17,6 +17,11 @@ public class Time
         setSeconds(0);
     }
     
+    public Time(int seconds)
+    {
+        setSeconds(seconds);
+    }
+    
     public void setSeconds(int seconds)
     {
         if(seconds > 0)
@@ -30,7 +35,7 @@ public class Time
     
     public String getTimeInHMS()
     {
-        return String.format("%2d:%2d:%2d", seconds / 3600, (seconds / 60) % 60, seconds - (seconds / 60) * 60);
+        return String.format("%02d:%02d:%02d", seconds / 3600, (seconds / 60) % 60, seconds - (seconds / 60) * 60);
     }
     
     public void makeTick()
@@ -45,7 +50,7 @@ public class Time
     
     public static void main(String[] args) {
         Time t = new Time();
-        for (int i = 0; i < 3475; i++) {
+        for (int i = 0; i < 7202; i++) {
             t.makeTick();
         }
         System.out.println(t.getTimeInSeconds() + "\n" + t.getTimeInHMS());
