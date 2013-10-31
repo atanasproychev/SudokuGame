@@ -746,10 +746,13 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
         }
         Scanner read = null;
         char[] stringToSudoku;
+        //test
+        String temp;
+        //test
         try
         {
             read = new Scanner(saveFileName);
-            String temp = read.nextLine();
+            /*String*/ temp = read.nextLine();
             stringToSudoku = temp.toCharArray();
         }catch(Exception e)
         {
@@ -763,13 +766,13 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
                 read.close();
             }
         }
-        for(int i = 0; i < 9; i++)
-        {
-            for(int j = 0; j < 9; j++)
-            {
-                puzzle.setActual(i, j, stringToSudoku[i * 9 + j] - '0');
-            }
-        }
+//        for(int i = 0; i < 9; i++)
+//        {
+//            for(int j = 0; j < 9; j++)
+//            {
+                puzzle.setActual(temp);
+//            }
+//        }
         setBoard(false);
         gameStarted = true;
         //System.out.println(printMatrix(actual));

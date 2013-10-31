@@ -72,18 +72,9 @@ public class SudokuSolver {
     {
         for(int i = 0; i < 9; i++)
         {
-            for(int j = 0; j < 9; j++)//sets state too
+            for(int j = 0; j < 9; j++)
             {
-                int value = sudokuAsString.charAt(i * 9 + j) - '0';
-                actual[i][j] = value;
-                if(value == 0)
-                {
-                    state[i][j] = 0;
-                }
-                else
-                {
-                    state[i][j] = 1;
-                }
+                actual[i][j] = sudokuAsString.charAt(i * 9 + j) - '0';
             }
         }
     }
@@ -118,31 +109,6 @@ public class SudokuSolver {
                 possible[i][j] = "";
             }
         }            
-    }
-    
-    public void resetAll()
-    {
-        for (int i = 0; i < 9; i++)
-        {
-            for (int j = 0; j < 9; j++)
-            {
-                actual[i][j] = 0;
-                state[i][j] = 0;
-                possible[i][j] = "";
-            }
-        }            
-    }
-    
-    public void resetPosition(int row, int col)
-    {
-        actual[row][col] = 0;
-        state[row][col] = 0;
-        possible[row][col] = "";
-    }
-    
-    public boolean canBeModified(int row, int col)
-    {
-        return state[row][col] == 0 || state[row][col] == 3;
     }
     
     public boolean isMoveValid(int row, int col, int value)
@@ -430,7 +396,7 @@ public class SudokuSolver {
         }
         if(possibleValues.equals(""))
         {
-            System.out.println("Possible values is \"\": " + row + ", " + col);
+            System.out.println(row + ", " + col);
             throw new Exception("Invalid Move");
         }
             
@@ -446,7 +412,7 @@ public class SudokuSolver {
         {
             for(int j = 0; j < 9; j++)
             {
-                if(canBeModified(i, j))
+                if(actual[i][j] == 0)
                 {
                     try
                     {
@@ -461,20 +427,7 @@ public class SudokuSolver {
                     //setToolTip
                     if(possible[i][j].length() == 1)
                     {
-                        int value = Integer.parseInt(possible[i][j]);
-                        if(value == actual[i][j])
-                        {
-                            break;
-                        }
-                        if(state[i][j] == 0)
-                        {
-                            state[i][j] = 2;
-                        }
-                        else
-                        {
-                            state[i][j] = value + 10;
-                        }
-                        actual[i][j] = value;
+                        actual[i][j] = Integer.parseInt(possible[i][j]);
 //                        setCell(i, j, actual[i][j]);
                         moves.push(String.format("%d%d%d", i, j, actual[i][j]));
 //                        setActivity(String.format("На (%d, %d) е добавена стойност %d.", i + 1, j + 1, actual[i][j]));
@@ -514,7 +467,7 @@ public class SudokuSolver {
                     {
                         for(int p = 0; p <= 2; p++)
                         {
-                            if(canBeModified(i + k, j + p) && possible[i + k][j + p].indexOf(n) != -1)
+                            if(actual[i + k][j + p] == 0 && possible[i + k][j + p].indexOf(n) != -1)
                             {
                                 occurrence++;
                                 colPos = j + p;
@@ -564,7 +517,7 @@ public class SudokuSolver {
                 occurrence = 0;
                 for(int j = 0; j < 9; j++)
                 {
-                    if(canBeModified(i, j) && possible[i][j].indexOf(n) != -1)
+                    if(actual[i][j] == 0 && possible[i][j].indexOf(n) != -1)
                     {
                         occurrence++;
                         if(occurrence > 1)
@@ -607,7 +560,7 @@ public class SudokuSolver {
                 occurrence = 0;
                 for(int i = 0; i < 9; i++)
                 {
-                    if((state[i][j] == 0 || state[i][j] == 3) && possible[i][j].indexOf(n) != -1)
+                    if(actual[i][j] == 0 && possible[i][j].indexOf(n) != -1)
                     {
                         occurrence++;
                         if(occurrence > 1)
@@ -1039,7 +992,6 @@ public class SudokuSolver {
             int value = Integer.parseInt(String.valueOf(possibleValues.charAt(i)));
 //            setCell(coordinates[0], coordinates[1], value);
             setActual(coordinates[0], coordinates[1], value);
-            setState(coordinates[0], coordinates[1], 2);
             moves.push(String.format("%d%d%d", coordinates[0], coordinates[1], value));
             System.out.printf("%d%d%d", coordinates[0], coordinates[1], value);
 //            setActivity(String.format("На (%d, %d) е добавена стойност %d.", coordinates[0] + 1, coordinates[1] + 1, value));
@@ -1092,7 +1044,15 @@ public class SudokuSolver {
     private String generateNewPuzzle(int level)
     {
         int numberOfEmptyCells = 0;
-        resetAll();
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                actual[i][j] = 0;
+                possible[i][j] = "";
+            }
+            
+        }
         
         actualStack.clear();
         possibleStack.clear();
@@ -1226,11 +1186,13 @@ public class SudokuSolver {
                 if(!duplicate)
                 {
                     emptyCells[i] = row * 10 + col;
-                    resetPosition(row, col);
+                    actual[row][col] = 0;
+                    possible[row][col] = "";
 
                     //symmetrical...
                     emptyCells[empty - 1 - i] = (8 - row) * 10 + (8 - col);
-                    resetPosition(8 - row, 8 - col);
+                    actual[8 - row][8 - col] = 0;
+                    possible[8 - row][8 - col] = "";
                 }
             }
             while(duplicate);
