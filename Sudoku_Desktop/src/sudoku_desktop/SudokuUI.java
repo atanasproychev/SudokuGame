@@ -91,6 +91,7 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
         GridLayout layout = new GridLayout(9, 9);
         cellsPanel.setLayout(layout);
         for(int i = 0; i < 9; i++)
+        {
             for(int j = 0; j < 9; j++)
             {
                 cell[i][j] = new JLabel();
@@ -104,7 +105,9 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
                 setRightBorder(i, j);
                 final int temp1 = i;
                 final int temp2 = j;
-                cell[i][j].addMouseListener(new MouseAdapter() {
+                cell[i][j].addMouseListener(new MouseAdapter()
+                {
+                                //@Override
                                 public void mousePressed(MouseEvent e)
                                 {
                                     if(selectedCell != 0)
@@ -119,6 +122,7 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
                         });
                 cellsPanel.add(cell[i][j]);
             }
+        }
     }
     
 //    public void run()
@@ -168,29 +172,45 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
         if(value == 0)
         {
             for(int i = 0; i < 9; i++)
+            {
                 for(int j = 0; j < 9; j++)
                 {
 //                    if(actual[i][j] == 0)
 //                        possible[i][j] = "";
                     if(puzzle.getActual(i, j) == 0)
+                    {
                         puzzle.setPossible(i, j, "");
+                    }
                 }
+            }
         }
         else
+        {
 //            possible[row][col] = String.valueOf(value);
             puzzle.setPossible(row, col, String.valueOf(value));
+        }
         if(value == 0)
+        {
             cell[row][col].setText("");
+        }
         else
+        {
             cell[row][col].setText(String.valueOf(value));
+        }
     }
     
     public void setToolTips()
     {
         for(int i = 0; i < 9; i++)
+        {
             for(int j = 0; j < 9; j++)
+            {
                 if(!puzzle.getPossible(i, j).equals(cell[i][j].getToolTipText()))
+                {
                     cell[i][j].setToolTipText(puzzle.getPossible(i, j));
+                }
+            }
+        }
     }
     
     public void setToolTip(int row, int column)
@@ -575,9 +595,13 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
         {
             int save = JOptionPane.showConfirmDialog(null, "Започвате нова игра.\nИскате ли да запишете текущата?", "Запис?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
             if(save == JOptionPane.CANCEL_OPTION)
+            {
                 return;
+            }
             else if(save == JOptionPane.YES_OPTION)
+            {
                 saveGame(false);
+            }
         }
         startGame();
     }//GEN-LAST:event_btnNewGameActionPerformed
@@ -585,6 +609,7 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
     public void clearBoard()
     {
         for(int i = 0; i < 9; i++)
+        {
             for(int j = 0; j < 9; j++)
             {
                 cell[i][j].setText("");
@@ -593,6 +618,7 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
 //                actual[i][j] = 0;
 //                possible[i][j] = "";
             }
+        }
         puzzle.resetActual();
         puzzle.resetPossible();
     }
@@ -601,16 +627,21 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
     {
         int value;
         for(int i = 0; i < 9; i++)
+        {
             for(int j = 0; j < 9; j++)
             {
                 value = puzzle.getActual(i, j);
                 if(isSolved)
                 {
                     if(cell[i][j].getBackground() == FILLED_BACKGROUND)
+                    {
                         continue;
+                    }
                     cell[i][j].setForeground(SOLVED_BY_COMPUTER_FOREGROUND);
                     if(cell[i][j].getText().isEmpty())
+                    {
                         setCell(i, j, value);
+                    }
                     continue;
                 }
                 if(value != 0)
@@ -624,6 +655,7 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
                     cell[i][j].setBackground(DEFAULT_BACKGROUND);
                 }
             }
+        }
     }
     
     public void startGame()
@@ -661,7 +693,9 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
             if(result == JFileChooser.APPROVE_OPTION)
             {
                 if(saveChooser.getSelectedFile().exists())
+                {
                     JOptionPane.showMessageDialog(saveChooser, "Файлът съществува и ще бъде презаписан!", "Грешка", JOptionPane.INFORMATION_MESSAGE);
+                }
                 saveFileName = new File(saveChooser.getSelectedFile().getAbsolutePath() + ".sudo");
             }   
             else 
@@ -671,8 +705,12 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
         }
         StringBuilder sudokuToString = new StringBuilder();
         for(int i = 0; i < 9; i++)
+        {
             for(int j = 0; j < 9; j++)
+            {
                 sudokuToString.append(cell[i][j].getText());
+            }
+        }
         System.out.println(sudokuToString);
         Formatter write = null;
         try
@@ -687,7 +725,9 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
         finally
         {
             if(write != null)
+            {
                 write.close();
+            }
         }
     }
     
@@ -719,11 +759,17 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
         finally
         {
             if(read != null)
+            {
                 read.close();
+            }
         }
         for(int i = 0; i < 9; i++)
+        {
             for(int j = 0; j < 9; j++)
+            {
                 puzzle.setActual(i, j, stringToSudoku[i * 9 + j] - '0');
+            }
+        }
         setBoard(false);
         gameStarted = true;
         //System.out.println(printMatrix(actual));
@@ -739,7 +785,9 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
     {
         int result = JOptionPane.showConfirmDialog(null, "Искате ли да запишете текущата игра?", "Запис?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if(result == JOptionPane.YES_OPTION)
+        {
             saveGame(false);
+        }
     }
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         saveGame(false);
@@ -780,7 +828,9 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
         try
         {
             if(!puzzle.solvePuzzle())
+            {
                 puzzle.solvePuzzleByBruteForce();
+            }
         }
         catch(Exception ex)
         {
@@ -789,7 +839,9 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
         }
         setBoard(true);
         if(!puzzle.isPuzzleSolved())
+        {
             JOptionPane.showMessageDialog(this, "Судокуто не е решено!", "Грешка", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnSolveActionPerformed
 
     private void btnUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUndoActionPerformed
@@ -865,7 +917,9 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
     public void setValueInSelectedCell(int value)
     {
         if(selectedCell == 0)
+        {
             return;
+        }
         int row = selectedCell / 10;
         int col = selectedCell % 10;
         if(value == 0)
@@ -885,7 +939,9 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
             selectedCell = 0;
         }
         if(puzzle.isPuzzleSolved())
+        {
             puzzleSolved();
+        }
     }
         
     public void puzzleSolved()
@@ -903,11 +959,15 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
         for(int i = 0; i < 9; i++)
         {
             if(i % 3 == 0)
+            {
                 result = String.format("%s\n", result);
+            }
             for(int j = 0; j < 9; j++)
             {
                 if(j % 3 == 0)
+                {
                     result = String.format("%s ", result);
+                }
                 result = String.format("%s%d", result, matrix[i][j]);
             }
             result = String.format("%s\n", result);
@@ -949,7 +1009,8 @@ public class SudokuUI extends javax.swing.JFrame /*implements Runnable*/
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.

@@ -7,7 +7,7 @@ package sudoku_desktop;
 import java.io.File;
 import java.util.Random;
 import java.util.Stack;
-import javax.swing.JOptionPane;
+//import javax.swing.JOptionPane;
 
 /**
  *
@@ -57,6 +57,12 @@ public class SudokuSolver {
     {
         return state[row][col];
     }
+
+    public void setState(int row, int col, int value)
+    {
+        state[row][col] = value;
+    }
+    
     public void setActual(int row, int col, int value)
     {
         actual[row][col] = value;
@@ -65,8 +71,12 @@ public class SudokuSolver {
     public void setActual(String sudokuAsString)
     {
         for(int i = 0; i < 9; i++)
+        {
             for(int j = 0; j < 9; j++)
+            {
                 actual[i][j] = sudokuAsString.charAt(i * 9 + j) - '0';
+            }
+        }
     }
     
     public String getPossible(int row, int col)
@@ -104,16 +114,28 @@ public class SudokuSolver {
     public boolean isMoveValid(int row, int col, int value)
     {
         if(value == 0)
+        {
             return true;
+        }
         for(int i = 0; i < 9; i++)
+        {
             if(actual[i][col] == value || actual[row][i] == value)
+            {
                 return false;
+            }
+        }
         int startRow = row - row % 3;
         int startCol = col - col % 3;
         for(int k = 0; k <= 2; k++)
+        {
             for(int p = 0; p <= 2; p++)
+            {
                 if(actual[startRow + k][startCol + p] == value)
+                {
                     return false;
+                }
+            }
+        }
         return true;
     }
     
@@ -128,7 +150,9 @@ public class SudokuSolver {
                 pattern = pattern.replaceFirst("" + actual[i][j] , "");
             }
             if(pattern.length() > 0)
+            {
                 return false;
+            }
         }
         for(int i = 0; i < 9; i++) // check col by col
         {
@@ -138,7 +162,9 @@ public class SudokuSolver {
                 pattern = pattern.replaceFirst("" + actual[j][i] , "");
             }
             if(pattern.length() > 0)
+            {
                 return false;
+            }
         }
         for(int j = 0; j < 9; j += 3) // check by minigrid
         {
@@ -146,11 +172,17 @@ public class SudokuSolver {
             for(int i = 0; i < 9; i += 3)
             {
                 for(int p = 0; p <= 2; p++)
+                {
                     for(int k = 0; k <= 2; k++)
+                    {
                         pattern = pattern.replaceFirst("" + actual[i + k][j + p] , "");
+                    }
+                }
             }
             if(pattern.length() > 0)
+            {
                 return false;
+            }
         }
         return true;
     }
@@ -190,7 +222,9 @@ public class SudokuSolver {
                                                     }
                                                 }while(changes);
                                                 if(exitLoop)
+                                                {
                                                     break;
+                                                }
                                                 //test for lone rangers in minigrids
                                                 changes = lookForLoneRangersInMinigrids();
                                                 System.out.println(changes);
@@ -201,7 +235,9 @@ public class SudokuSolver {
                                                 }
                                             }while(changes);
                                             if(exitLoop)
+                                            {
                                                 break;
+                                            }
                                             //test for lone rangers in rows
                                             changes = lookForLoneRangersInRows();
                                             System.out.println(changes);
@@ -212,7 +248,9 @@ public class SudokuSolver {
                                             }
                                         }while(changes);
                                         if(exitLoop)
+                                        {
                                             break;
+                                        }
                                         //test for lone rangers in columns
                                         changes = lookForLoneRangersInColumns();
                                         System.out.println(changes);
@@ -223,7 +261,9 @@ public class SudokuSolver {
                                         }
                                     }while(changes);
                                     if(exitLoop)
+                                    {
                                         break;
+                                    }
                                     //test for twins in minigrids
                                     changes = lookForTwinsInMinigrids();
                                     System.out.println(changes);
@@ -234,7 +274,9 @@ public class SudokuSolver {
                                     }
                                 }while(changes);
                                 if(exitLoop)
+                                {
                                     break;
+                                }
                                 //test for twins in rows
                                 changes = lookForTwinsInRows();
                                 System.out.println(changes);
@@ -245,7 +287,9 @@ public class SudokuSolver {
                                 }
                             }while(changes);
                             if(exitLoop)
+                            {
                                 break;
+                            }
                             //test for twins in columns
                             changes = lookForTwinsInColumns();
                             System.out.println(changes);
@@ -256,7 +300,9 @@ public class SudokuSolver {
                             }
                         }while(changes);
                         if(exitLoop)
+                        {
                             break;
+                        }
                         //test for triplets in minigrids
                         changes = lookForTripletsInMinigrids();
                         System.out.println(changes);
@@ -267,7 +313,9 @@ public class SudokuSolver {
                         }
                     }while(changes);
                     if(exitLoop)
+                    {
                         break;
+                    }
                     //test for triplets in rows
                     changes = lookForTripletsInRows();
                     System.out.println(changes);
@@ -278,7 +326,9 @@ public class SudokuSolver {
                     }
                 }while(changes);
                 if(exitLoop)
+                {
                     break;
+                }
                 //test for triplets in columns
                 changes = lookForTripletsInColumns();
                 System.out.println(changes);
@@ -301,16 +351,22 @@ public class SudokuSolver {
             return true;
         }
         else
+        {
             return false;
+        }
     }
     
     public String calculatePossibleValues(int row, int col) throws Exception
     {
         String possibleValues;//System.out.println(possible[row][col]);
         if(possible[row][col] == null || possible[row][col].equals(""))
+        {
             possibleValues = "123456789";
+        }
         else
+        {
             possibleValues = possible[row][col];
+        }
         //System.out.println("pos" + possibleValues + "end");
         for(int i = 0; i < 9; i++)
         {
@@ -329,9 +385,15 @@ public class SudokuSolver {
         int startRow = row - row % 3;
         int startCol = col - col % 3;
         for(int k = startRow; k <= startRow + 2; k++)
+        {
             for(int p = startCol; p <= startCol + 2; p++)
+            {
                 if(actual[k][p] != 0)
+                {
                     possibleValues = possibleValues.replaceFirst(String.valueOf(actual[k][p]), "");
+                }
+            }
+        }
         if(possibleValues.equals(""))
         {
             System.out.println(row + ", " + col);
@@ -347,6 +409,7 @@ public class SudokuSolver {
         System.out.println("checkRowsAndColumns()");
         boolean changes = false;
         for(int i = 0; i < 9; i++)
+        {
             for(int j = 0; j < 9; j++)
             {
                 if(actual[i][j] == 0)
@@ -370,11 +433,14 @@ public class SudokuSolver {
 //                        setActivity(String.format("На (%d, %d) е добавена стойност %d.", i + 1, j + 1, actual[i][j]));
                         changes = true;
                         if(hintMode)
+                        {
                             return true;
+                        }
                         totalscore += 1;
                     }
                 }
             }
+        }
 //        setToolTips();
         return changes;
     }
@@ -390,7 +456,8 @@ public class SudokuSolver {
         rowPos = 0;
         for(int n = 1; n <= 9; n++)//check for each number
         {
-            for(int i = 0; i < 9; i += 3)//check minigrids
+            for(int i = 0; i < 9; i += 3)
+            {
                 for(int j = 0; j < 9; j += 3)
                 {
                     nextMiniGrid = false;
@@ -413,7 +480,9 @@ public class SudokuSolver {
                             }
                         }
                         if(nextMiniGrid)
+                        {
                             break;
+                        }
                     }
                     if(!nextMiniGrid && occurrence == 1)
                     {//the number is confirmed
@@ -421,11 +490,14 @@ public class SudokuSolver {
                         moves.push(String.format("%d%d%d", rowPos, colPos, n));
 //                        setActivity(String.format("На (%d, %d) е добавена стойност %d.", rowPos + 1, colPos + 1, n));
                         changes = true;
-                        if(hintMode)//if is in hint mode
+                        if(hintMode)
+                        {
                             return true;
+                        }
                         totalscore += 2;
                     }
                 }
+            }
         }
         return changes;
     }
@@ -462,8 +534,10 @@ public class SudokuSolver {
                     moves.push(String.format("%d%d%d", rowPos, colPos, n));
 //                    setActivity(String.format("На (%d, %d) е добавена стойност %d.", rowPos + 1, colPos + 1, n));
                     changes = true;
-                    if(hintMode)//if is in hint mode
+                    if(hintMode)
+                    {
                         return true;
+                    }
                     totalscore += 2;
                 }
             }
@@ -503,8 +577,10 @@ public class SudokuSolver {
                     moves.push(String.format("%d%d%d", rowPos, colPos, n));
 //                    setActivity(String.format("На (%d, %d) е добавена стойност %d.", rowPos + 1, colPos + 1, n));
                     changes = true;
-                    if(hintMode)//if is in hint mode
+                    if(hintMode)
+                    {
                         return true;
+                    }
                     totalscore += 2;
                 }
             }
@@ -518,6 +594,7 @@ public class SudokuSolver {
         boolean changes = false;
         
         for(int i = 0; i < 9; i++)//look for twins in each cell
+        {
             for(int j = 0; j < 9; j++)
             {
                 if(actual[i][j] == 0 && possible[i][j].length() == 2)//if cell have two possible values
@@ -542,16 +619,22 @@ public class SudokuSolver {
                                             possible[kk][pp] = possible[kk][pp].replaceFirst(String.valueOf(possible[i][j].charAt(0)), "");
                                             possible[kk][pp] = possible[kk][pp].replaceFirst(String.valueOf(possible[i][j].charAt(1)), "");
                                             if(!originalPossibleValues.equals(possible[kk][pp]))
+                                            {
                                                 changes = true;
+                                            }
                                             if(possible[kk][pp].equals(""))
+                                            {
                                                 throw new Exception("Invalid Move");
+                                            }
                                             if(possible[kk][pp].length() == 1)
                                             {
 //                                                setCell(kk, pp, Integer.parseInt(possible[kk][pp]));
                                                 moves.push(String.format("%d%d%s", kk, pp, possible[kk][pp]));
 //                                                setActivity(String.format("На (%d, %d) е добавена стойност %s.", kk + 1, pp + 1, possible[kk][pp]));
                                                 if(hintMode)
+                                                {
                                                     return true;
+                                                }
                                                 totalscore += 3;
                                             }
                                         }
@@ -562,6 +645,7 @@ public class SudokuSolver {
                     }
                 }
             }
+        }
         return changes;
     }
     
@@ -571,6 +655,7 @@ public class SudokuSolver {
         boolean changes = false;
         
         for(int i = 0; i < 9; i++)//for each row, in each column, look for twins
+        {
             for(int j = 0; j < 9; j++)
             {
                 if(actual[i][j] == 0 && possible[i][j].length() == 2)//if cell have two possible values
@@ -589,7 +674,9 @@ public class SudokuSolver {
                                     possible[i][pp] = possible[i][pp].replaceFirst(String.valueOf(possible[i][j].charAt(0)), "");
                                     possible[i][pp] = possible[i][pp].replaceFirst(String.valueOf(possible[i][j].charAt(1)), "");
                                     if(!originalPossibleValues.equals(possible[i][pp]))
+                                    {
                                         changes = true;
+                                    }
                                     if(possible[i][pp].equals(""))
                                     {
                                         System.out.println("i, j, p, pp " + i + ", " + j + ", " + p + ", " + pp);
@@ -601,7 +688,9 @@ public class SudokuSolver {
                                         moves.push(String.format("%d%d%s", i, pp, possible[i][pp]));
 //                                        setActivity(String.format("На (%d, %d) е добавена стойност %s.", i + 1, pp + 1, possible[i][pp]));
                                         if(hintMode)
+                                        {
                                             return true;
+                                        }
                                         totalscore += 3;
                                     }
                                 }
@@ -610,6 +699,7 @@ public class SudokuSolver {
                     }
                 }
             }
+        }
         return changes;
     }
     
@@ -619,6 +709,7 @@ public class SudokuSolver {
         boolean changes = false;
         
         for(int j = 0; j < 9; j++)//for each row, in each column, look for twins
+        {
             for(int i = 0; i < 9; i++)
             {
                 if(actual[i][j] == 0 && possible[i][j].length() == 2)//if cell have two possible values
@@ -637,16 +728,22 @@ public class SudokuSolver {
                                     possible[kk][j] = possible[kk][j].replaceFirst(String.valueOf(possible[i][j].charAt(0)), "");
                                     possible[kk][j] = possible[kk][j].replaceFirst(String.valueOf(possible[i][j].charAt(1)), "");
                                     if(!originalPossibleValues.equals(possible[kk][j]))
+                                    {
                                         changes = true;
+                                    }
                                     if(possible[kk][j].equals(""))
+                                    {
                                         throw new Exception("Invalid Move");
+                                    }
                                     if(possible[kk][j].length() == 1)
                                     {
 //                                        setCell(kk, j, Integer.parseInt(possible[kk][j]));
                                         moves.push(String.format("%d%d%s", kk, j, possible[kk][j]));
 //                                        setActivity(String.format("На (%d, %d) е добавена стойност %s.", kk + 1, j + 1, possible[kk][j]));
                                         if(hintMode)
+                                        {
                                             return true;
+                                        }
                                         totalscore += 3;
                                     }
                                 }
@@ -655,6 +752,7 @@ public class SudokuSolver {
                     }
                 }
             }
+        }
         return changes;
     }
     //triplets
@@ -664,7 +762,8 @@ public class SudokuSolver {
         System.out.println("lookForTripletsInMinigrids()");
         boolean changes = false;
         
-        for(int i = 0; i < 9; i++) {
+        for(int i = 0; i < 9; i++)
+        {
             for(int j = 0; j < 9; j++)
             {
                 if(actual[i][j] == 0 && possible[i][j].length() == 3)//if cell have three possible values
@@ -679,7 +778,9 @@ public class SudokuSolver {
                         {
                             if((i != k && j != p) && ((possible[k][p].equals(possible[i][j])) || (possible[k][p].length() == 2 && possible[i][j].contains(String.valueOf(possible[k][p].charAt(0)))
                                                                                                                                && possible[i][j].contains(String.valueOf(possible[k][p].charAt(1))))))
+                            {
                                 tripletsLocation.append(k).append(p);
+                            }
                         }
                     }
                     if(tripletsLocation.length() == 6)
@@ -701,9 +802,13 @@ public class SudokuSolver {
                                     possible[k][p] = possible[k][p].replaceFirst(String.valueOf(possible[i][j].charAt(2)), "");
 //                                    setToolTip(k, p);
                                     if(!originalPossibleValues.equals(possible[k][p]))
+                                    {
                                         changes = true;
+                                    }
                                     if(possible[k][p].equals(""))
+                                    {
                                         throw new Exception("Invalid Move");
+                                    }
                                     if(possible[k][p].length() == 1)
                                     {
 //                                        setCell(k, p, Integer.parseInt(possible[k][p]));
@@ -711,7 +816,9 @@ public class SudokuSolver {
                                         moves.push(String.format("%d%d%s", k, p, possible[k][p]));
 //                                        setActivity(String.format("На (%d, %d) е добавена стойност %s.", k + 1, p + 1, possible[k][p]));
                                         if(hintMode)
+                                        {
                                             return true;
+                                        }
                                         totalscore += 4;
                                     }
                                 }
@@ -740,7 +847,9 @@ public class SudokuSolver {
                     {
                         if((j != p) && ((possible[i][p].equals(possible[i][j])) || (possible[i][p].length() == 2 && possible[i][j].contains(String.valueOf(possible[i][p].charAt(0)))
                                                                                                                  && possible[i][j].contains(String.valueOf(possible[i][p].charAt(1))))))
+                        {
                             tripletsLocation.append(i).append(p);
+                        }
                     }
                     if(tripletsLocation.length() == 6)
                     {
@@ -757,9 +866,13 @@ public class SudokuSolver {
                                 possible[i][p] = possible[i][p].replaceFirst(String.valueOf(possible[i][j].charAt(2)), "");
 //                                setToolTip(i, p);
                                 if(!originalPossibleValues.equals(possible[i][p]))
+                                {
                                     changes = true;
+                                }
                                 if(possible[i][p].equals(""))
+                                {
                                     throw new Exception("Invalid Move");
+                                }
                                 if(possible[i][p].length() == 1)
                                 {
 //                                    setCell(i, p, Integer.parseInt(possible[i][p]));
@@ -767,7 +880,9 @@ public class SudokuSolver {
                                     moves.push(String.format("%d%d%s", i, p, possible[i][p]));
 //                                    setActivity(String.format("На (%d, %d) е добавена стойност %s.", i + 1, p + 1, possible[i][p]));
                                     if(hintMode)
+                                    {
                                         return true;
+                                    }
                                     totalscore += 4;
                                 }
                             }
@@ -795,7 +910,9 @@ public class SudokuSolver {
                     {
                         if((i != k) && ((possible[k][j].equals(possible[i][j])) || (possible[k][j].length() == 2 && possible[i][j].contains(String.valueOf(possible[k][j].charAt(0)))
                                                                                                                            && possible[i][j].contains(String.valueOf(possible[k][j].charAt(1))))))
+                        {
                             tripletsLocation.append(k).append(j);
+                        }
                     }
                     if(tripletsLocation.length() == 6)
                     {
@@ -811,9 +928,13 @@ public class SudokuSolver {
                                 possible[k][j] = possible[k][j].replaceFirst(String.valueOf(possible[i][j].charAt(2)), "");
 //                                setToolTip(k, j);
                                 if(!originalPossibleValues.equals(possible[k][j]))
+                                {
                                     changes = true;
+                                }
                                 if(possible[k][j].equals(""))
+                                {
                                     throw new Exception("Invalid Move");
+                                }
                                 if(possible[k][j].length() == 1)
                                 {
 //                                    setCell(k, j, Integer.parseInt(possible[k][j]));
@@ -821,7 +942,9 @@ public class SudokuSolver {
                                     moves.push(String.format("%d%d%s", k, j, possible[k][j]));
 //                                    setActivity(String.format("На (%d, %d) е добавена стойност %s.", k + 1, j + 1, possible[k][j]));
                                     if(hintMode)
+                                    {
                                         return true;
+                                    }
                                     totalscore += 4;
                                 }
                             }
@@ -839,6 +962,7 @@ public class SudokuSolver {
         int min = 10;
         int[] coordinates = new int[2];
         for(int i = 0; i < 9; i++)
+        {
             for(int j = 0; j < 9; j++)
             {
                 if(actual[i][j] == 0 && possible[i][j].length() < min)
@@ -848,6 +972,7 @@ public class SudokuSolver {
                     coordinates[1] = j;
                 }
             }
+        }
         return coordinates;
     }
     
@@ -881,7 +1006,9 @@ public class SudokuSolver {
                 {
                     solvePuzzleByBruteForce();
                     if(bruteForceStop)
+                    {
                         return;
+                    }
                 }
             }
             catch(Exception ex)
@@ -975,8 +1102,12 @@ public class SudokuSolver {
         
         StringBuilder sudokuToString = new StringBuilder();
         for(int i = 0; i < 9; i++)
+        {
             for(int j = 0; j < 9; j++)
+            {
                 sudokuToString.append(actual[i][j]);
+            }
+        }
         
         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!verify the puzzle has only one solution!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         
@@ -1001,7 +1132,9 @@ public class SudokuSolver {
                     }
                 }
                 else
+                {
                     break;
+                }
             }
             catch (Exception e)
             {
@@ -1009,7 +1142,9 @@ public class SudokuSolver {
             }
             
             if(tries > 50)
+            {
                 return "";
+            }
         }
         while(true);
         System.out.println("sudokuToString:   " + sudokuToString);
@@ -1075,7 +1210,9 @@ public class SudokuSolver {
             for (col = 0; col < 9 && notFound; col++)
             {
                 if(sudokuAsString.charAt(row * 9 + col) == '0')
+                {
                     notFound = false;
+                }
             }
         }
         
@@ -1090,7 +1227,9 @@ public class SudokuSolver {
             for (col = 0; col < 9 && notFound; col++)
             {
                 if(sudokuAsString.charAt(row * 9 + col) != '0')
+                {
                     notFound = false;
+                }
             }
         }
         
@@ -1131,22 +1270,31 @@ public class SudokuSolver {
             System.out.println("Total Score: " + totalscore);
             if(!result.isEmpty())
             {
-                switch (level) {
+                switch (level)
+                {
                     case 1:
                         if(totalscore >= 42 && totalscore <= 46)
+                        {
                             break MAKE_RESULT;
+                        }
                         break;
                     case 2:
                         if(totalscore >= 49 && totalscore <= 53)
+                        {
                             break MAKE_RESULT;
+                        }
                         break;
                     case 3:
                         if(totalscore >= 56 && totalscore <= 60)
+                        {
                             break MAKE_RESULT;
+                        }
                         break;
                     case 4:
                         if(totalscore >= 112 && totalscore <= 116)
+                        {
                             break MAKE_RESULT;
+                        }
                         break;
                 }
             }
@@ -1163,11 +1311,15 @@ public class SudokuSolver {
         for(int i = 0; i < 9; i++)
         {
             if(i % 3 == 0)
+            {
                 result = String.format("%s\n", result);
+            }
             for(int j = 0; j < 9; j++)
             {
                 if(j % 3 == 0)
+                {
                     result = String.format("%s ", result);
+                }
                 result = String.format("%s%d", result, actual[i][j]);
             }
             result = String.format("%s\n", result);
